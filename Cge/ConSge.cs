@@ -20,7 +20,7 @@ public abstract class ConSge
         public int FontFamily;
         public int FontWeight;
 
-        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 50)]
         public string FaceName;
     }
 
@@ -139,7 +139,7 @@ public abstract class ConSge
     protected short Height { get; private set; }
     protected short FontWidth { get; private set; }
     protected short FontHeight { get; private set; }
-    
+
     protected short DefaultColor { get; set; } = 0x0000;
 
     #region Protected Delegates
@@ -192,6 +192,7 @@ public abstract class ConSge
         _charInfoBuffer[i].UnicodeChar = c;
     }
 
+
     /// <summary>
     /// Writes text to the screen.
     /// </summary>
@@ -208,7 +209,14 @@ public abstract class ConSge
             DrawPixel(x + i, y, color, text[i]);
         }
     }
+    protected void DrawPixelBall(int x, int y, short color, char c = DEFAULT_CHAR)
+    {
+        var i = y * Width + x;
+        if (i < 0 || i >= _charInfoBuffer.Length) return;
+        _charInfoBuffer[i].Attributes = color;
+        _charInfoBuffer[i].UnicodeChar = c;
 
+    }
     /// <summary>
     /// Paints the whole screen black.
     /// </summary>
@@ -220,7 +228,7 @@ public abstract class ConSge
             _charInfoBuffer[i].UnicodeChar = DEFAULT_CHAR;
         }
     }
-    
+
     #endregion
 
     #region Public Methods

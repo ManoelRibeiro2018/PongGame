@@ -1,9 +1,13 @@
-﻿namespace ConSge;
+﻿using System;
+
+namespace ConSge;
 
 public class TestGame : ConSge
 {
-    float pos = 0;
-    public TestGame() : base("TestGame", 128, 64, 10, 10)
+    float posh = 0;
+    float poswBall = 0;
+    float poshBall = 0;
+    public TestGame() : base("TestGame", 90, 30, 200, 200)
     {
     }
 
@@ -17,14 +21,33 @@ public class TestGame : ConSge
         ClearScreen();
         DrawText(20, 0, 0x4F, "Example game. Hold SPACEBAR to move the pixel");
 
-        if (KeyHeld(32)) // SPACEBAR Key
+        PongBall(20, 0, 0x4F, "Example game. Hold SPACEBAR to move the pixel");
+      
+        if (KeyHeld(38))
         {
-            pos += deltaTime * 50.0f;
-            if (Width * Height < pos) pos = 0;
+            if (posh > 0)
+                posh -= deltaTime * 20.0f;
+            else
+                posh = +1;
         }
-
-        DrawPixel((int)pos, 0, 0x0E);
+        if (KeyHeld(40))
+        {
+            if (posh < Height)
+                posh += deltaTime * 20.0f;
+            else
+                posh = Height - 1;
+        }
+        DrawPixel(0, (int)posh, 0x0E);
         return true;
+    }
+
+    private void PongBall(int x, int y, short color, string text)
+    {
+        for (var i = 0; i < text.Length; i++)
+        {
+            if (x + i >= Width) return;
+            DrawPixelBall(x + i, y, color, text[i]);
+        }
     }
 }
 
